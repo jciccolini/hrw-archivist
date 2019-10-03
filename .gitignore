@@ -1,4 +1,8 @@
+#virtual environment
+/venv
+
 # Root .htaccess
+/.htaccess
 
 # php-cs-fixer cache
 /.php_cs.cache
@@ -22,9 +26,6 @@
 # Test files
 /application/tests/_files/temp/
 
-# Plugins and themes
-/plugins/
-/themes/
 
 # Files
 /files/original/*
