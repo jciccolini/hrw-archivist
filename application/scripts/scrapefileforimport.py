@@ -11,11 +11,14 @@ from PyPDF2 import PdfFileReader
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+#Set working directory if needed
+os.chdir('../..')
+
 #URL to scrape data from coalex site
 url = "http://www.osmre.gov/resources/coalex.shtm"
 
 #Put all files in folder. Create folder if there isn't one
-folder_location = r'user_files'
+folder_location = r'files/original/'
 if not os.path.exists(folder_location):os.mkdir(folder_location)
 #Get and parse html
 response = requests.get(url)
@@ -27,7 +30,7 @@ for link in soup.select("a[href$='.pdf']"):
         f.write(requests.get(urljoin(url,link['href'])).content)
 
 #List all files in folder
-pdfs = glob.glob("user_files/coalex_*.pdf")
+pdfs = glob.glob("files/original/coalex_*.pdf")
 
 
  #Function to get metadata from downloaded files
@@ -48,7 +51,7 @@ for pdf in pdfs:
 
 #Write file to path specified
 outname = "coalex_import_df.csv"
-outdir = "user_files"
+outdir = "files/bulk_import"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 path = os.path.join(outdir, outname)
