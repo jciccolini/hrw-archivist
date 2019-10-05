@@ -27,7 +27,7 @@
 /application/tests/_files/temp/
 
 # Scripted File Downloads
-/scripts/files/
+/user_scripts/user_files/
 
 # Files
 /files/original/*
