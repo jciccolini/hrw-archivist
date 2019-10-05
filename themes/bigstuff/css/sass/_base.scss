@@ -1,0 +1,28 @@
+//* @group ----- Typography ----- */
+
+$base-font-size: 12px;
+$base-line-height: 18px;
+
+$title-stack: "Merriweather", "Times New Roman", Times, serif;
+$header-stack: "Merriweather", "Times New Roman", Times, serif;
+$minor-header-stack: "Merriweather Sans", Verdana, sans-serif;
+$base-font-stack: "Merriweather Sans", Verdana, sans-serif;
+$monospace-stack: 'Courier New',Courier,'Lucida Sans Typewriter','Lucida Typewriter',monospace;
+$blueprint-blue:  #103c63;
+$engine-blue: #103cb1;
+$header-color: $engine-blue;
+$underlay-color: $blueprint-blue;
+$link-color: $engine-blue;
+$engine-red:  #be2e21;
+$highlight-color: $engine-red;
+$hover-color: $engine-red;
+$text-color: #101010;
+$unemphasised-color: #666666;
+$light-border: #cccccc;
+$light-background: #fafafa;
+$panel-background: #eeeeee;
+$panel-background-featured: #fafac0;
+$button-background: #336699;
+$button-border: #005177;
+$button-color: white;
+//* @end */
