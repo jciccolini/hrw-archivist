@@ -48,6 +48,12 @@ RewriteRule .* index.php
     </IfModule>
 </FilesMatch>
 
+<key>EnvironmentVariables</key>
+<dict>
+  <key>PATH</key>
+  <string>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin</string>
+</dict>
+
 # --------#
 # Caching #
 # --------#
