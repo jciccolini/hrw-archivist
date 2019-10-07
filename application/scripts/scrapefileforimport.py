@@ -4,8 +4,15 @@ import requests
 import sys 
 import glob
 import re
+import io
 import pandas as pd
-from urlparse import urljoin
+import pytesseract
+try: 
+    from PIL import Image
+except ImportError:
+    import Image
+from wand.image import Image
+from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader
 reload(sys)
@@ -30,19 +37,20 @@ for link in soup.select("a[href$='.pdf']"):
         f.write(requests.get(urljoin(url,link['href'])).content)
 
 #List all files in folder
-pdfs = glob.glob("files/original/coalex_*.pdf")
+pdfs = glob.glob("files/original/coalex_00*.pdf")
 
 
  #Function to get metadata from downloaded files
 def get_info(path):
     with open(path, 'rb') as f:
         filename = re.sub(".*\\/", "",path)
+        text = pytesseract.image_to_string(Image.open(path))
         pdf = PdfFileReader(f)
         info = pdf.getDocumentInfo()
-    return([filename, info.author, info.creator, info.producer, info.subject, info.title])
+    return([filename, text, info.author, info.creator, info.producer, info.subject, info.title])
 
 #Create dataframe hardcoded for metadata selected. Change or generalize to pull any other metadata
-df = pd.DataFrame(columns=['filename','author','creator','producer','subject','title'])
+df = pd.DataFrame(columns=['filename','text','author','creator','producer','subject','title'])
 
 #Put metadata in dataframe
 for pdf in pdfs:
