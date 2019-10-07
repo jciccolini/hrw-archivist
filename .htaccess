@@ -11,7 +11,7 @@
 # Note: This should only be enabled for development or debugging. Keep this
 # line commented for production sites.
 # 
-SetEnv APPLICATION_ENV development
+# SetEnv APPLICATION_ENV development
 
 # ------------- #
 # Rewrite Rules #
@@ -47,12 +47,6 @@ RewriteRule .* index.php
         Deny from all
     </IfModule>
 </FilesMatch>
-
-<key>EnvironmentVariables</key>
-<dict>
-  <key>PATH</key>
-  <string>/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin</string>
-</dict>
 
 # --------#
 # Caching #
