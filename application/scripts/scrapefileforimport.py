@@ -30,15 +30,13 @@ for link in soup.select("a[href$='.pdf']"):
 
 #List all files in folder
 os.chdir('files/original/')
-pdfs = glob.glob("coalex_00*.pdf")
+pdfs = glob.glob("coalex_*.pdf")
 
-#Make holder for page text
-final_text = []
 
 #Function to get metadata and OCR from downloaded files
 def get_info(path):
     with open(path, 'rb') as f:
-        pages = convert_from_path(path, 500) 
+        pages = convert_from_path(path, 200) 
         image_counter = 1
         for page in pages: 
             filename = "page_"+str(image_counter)+".jpg"
@@ -48,7 +46,8 @@ def get_info(path):
         for i in range(1, filelimit + 1): 
             filename = "page_"+str(i)+".jpg"
             text = str(((pytesseract.image_to_string(Image.open(filename))))) 
-            text = text.replace('-\n', '')     
+            text = text.replace('-\n', '')
+            final_text = []
             final_text.append(text)
             finaltext = "\n".join(final_text)
         pdf = PdfFileReader(f)
