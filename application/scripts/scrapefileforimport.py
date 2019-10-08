@@ -1,22 +1,14 @@
 #!/usr/bin/env python3
 import os
 import requests 
-import sys 
 import glob
-import re
-import io
-import pandas as pd
 import pytesseract
-try: 
-    from PIL import Image
-except ImportError:
-    import Image
-from wand.image import Image
+import pandas as pd
+from PIL import Image
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from PyPDF2 import PdfFileReader
-reload(sys)
-sys.setdefaultencoding('utf8')
+from pdf2image import convert_from_path
 
 #Set working directory if needed
 os.chdir('../..')
@@ -37,17 +29,31 @@ for link in soup.select("a[href$='.pdf']"):
         f.write(requests.get(urljoin(url,link['href'])).content)
 
 #List all files in folder
-pdfs = glob.glob("files/original/coalex_00*.pdf")
+os.chdir('files/original/')
+pdfs = glob.glob("coalex_00*.pdf")
 
+#Make holder for page text
+final_text = []
 
- #Function to get metadata from downloaded files
+#Function to get metadata and OCR from downloaded files
 def get_info(path):
     with open(path, 'rb') as f:
-        filename = re.sub(".*\\/", "",path)
-        text = pytesseract.image_to_string(Image.open(path))
+        pages = convert_from_path(path, 500) 
+        image_counter = 1
+        for page in pages: 
+            filename = "page_"+str(image_counter)+".jpg"
+            page.save(filename, 'JPEG') 
+            image_counter = image_counter + 1
+        filelimit = image_counter-1
+        for i in range(1, filelimit + 1): 
+            filename = "page_"+str(i)+".jpg"
+            text = str(((pytesseract.image_to_string(Image.open(filename))))) 
+            text = text.replace('-\n', '')     
+            final_text.append(text)
+            finaltext = "\n".join(final_text)
         pdf = PdfFileReader(f)
         info = pdf.getDocumentInfo()
-    return([filename, text, info.author, info.creator, info.producer, info.subject, info.title])
+    return([path, finaltext, info.author, info.creator, info.producer, info.subject, info.title])
 
 #Create dataframe hardcoded for metadata selected. Change or generalize to pull any other metadata
 df = pd.DataFrame(columns=['filename','text','author','creator','producer','subject','title'])
@@ -59,7 +65,7 @@ for pdf in pdfs:
 
 #Write file to path specified
 outname = "coalex_import_df.csv"
-outdir = "files/bulk_import"
+outdir = "bulk_import"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
 path = os.path.join(outdir, outname)
